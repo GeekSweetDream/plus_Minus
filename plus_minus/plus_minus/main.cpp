@@ -68,12 +68,32 @@ int convertNumb(char numb)  //Конвертирует символ в числ�
     return intNumb;
 }
 
-char action(int sign, int a, int b, int base, int &ost)   //Складывает части числа
+char action(char sign, int a, int b, int base, int &ost)   //Складывает части числа
 {
     char answer = {};
-    a += b + ost;
-    ost = a / base;
-    a = a % base;
+    switch (sign)
+    {
+        case '+':{
+            a += b + ost;
+            ost = a / base;
+            a = a % base;
+            break;
+        }
+        case '*':{
+            a *= b + ost;
+            ost = a / base;
+            a = a % base;
+            break;
+        }
+        case '-':{
+            // Сделать
+            break;
+        }
+        case '/':{
+            //сделать
+            break;
+        }
+    }
     return answer+a ;
 }
 
