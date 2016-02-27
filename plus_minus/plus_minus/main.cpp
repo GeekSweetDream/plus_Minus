@@ -13,8 +13,8 @@ using namespace std;
 
 
 string inputBigNumber();
-string operations(char sign, string firstNumb, string secondNumb);
-int giveNumbMax(string firstNumb, string secondNumb);
+string operations(char sign, string &firstNumb, string &secondNumb);
+void giveNumbMax(string &firstNumb, string &secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 void changeStr(string &firstStr, string &secondStr);
@@ -39,10 +39,8 @@ string operations(char sign, string &firstNumb, string &secondNumb)  //
 {
     string answer = "";
     int maxLength = (int) firstNumb.length();
-    if (giveNumbMax(firstNumb, secondNumb))
-    {
-        maxLength = (int) secondNumb.length();
-    }
+    giveNumbMax(firstNumb, secondNumb);
+    maxLength = (int)firstNumb.length() - 1;
     for (int i = maxLength - 1; i >= 0; i--)
     {
       //Не потерять
