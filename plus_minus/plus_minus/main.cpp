@@ -14,14 +14,16 @@ using namespace std;
 
 string inputBigNumber();
 string operations(char sign, string firstNumb, string secondNumb);
-int giveNumbLong(string firstNumb, string secondNumb);
+int giveNumbMax(string firstNumb, string secondNumb);
 int convertNumb(char numb);
+int equalMax(string firstNumb, string secondNumb);
+void changeStr(string &firstStr, string &secondStr);
 char action(int sign, int a, int b, int base, int &ost);
 
 int main(int argc, const char * argv[])
 {
     string test = "0123";
-    cout << "12"+test << endl;
+    cout << "22"+test << endl;
     cout << 123<< endl;
     return 0;
 }
@@ -33,11 +35,11 @@ string inputBigNumber() //ввод числа
     return value;
 }
 
-string operations(char sign, string firstNumb, string secondNumb)  //
+string operations(char sign, string &firstNumb, string &secondNumb)  //
 {
     string answer = "";
     int maxLength = (int) firstNumb.length();
-    if (giveNumbLong(firstNumb, secondNumb))
+    if (giveNumbMax(firstNumb, secondNumb))
     {
         maxLength = (int) secondNumb.length();
     }
@@ -48,14 +50,43 @@ string operations(char sign, string firstNumb, string secondNumb)  //
     return 0;
 }
 
-int giveNumbLong(string firstNumb, string secondNumb)   //Выдает максимальное число
+void giveNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и записывает его в firstNumb
 {
-    int winner = 0;
     if (firstNumb.length() < secondNumb.length())
     {
-        winner = 1;
+        changeStr(firstNumb, secondNumb);
+    }else
+    {
+        if ((firstNumb.length() == secondNumb.length()))
+        {
+            if(equalMax(firstNumb,secondNumb))
+            {
+                changeStr(firstNumb, secondNumb);
+            }
+        }
     }
-    return winner;
+}
+
+void changeStr(string &firstStr, string &secondStr) // меняет местами строки
+{
+    string helpStr = firstStr;
+    firstStr = secondStr;
+    secondStr = helpStr;
+}
+    
+int equalMax(string firstNumb, string secondNumb)  // сравнивает две строки одинаковой длины
+{
+    int max = 0;
+    for(int i = (int)firstNumb.length() - 1; i >= 0; i--)
+    {
+        if((firstNumb[i] - '0') < (secondNumb[i] - '0'))
+        {
+            max = 1;
+            break;
+        }
+    }
+    return max;
+
 }
 
 int convertNumb(char numb)  //Конвертирует символ в число
