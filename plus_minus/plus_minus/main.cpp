@@ -18,13 +18,14 @@ void giveNumbMax(string &firstNumb, string &secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 void changeStr(string &firstStr, string &secondStr);
+char inputSign();
 char action(int sign, int a, int b, int base, int &ost);
 
 int main(int argc, const char * argv[])
 {
     string test = "0123";
-    cout << "22"+test << endl;
-    cout << 123<< endl;
+    cout << 22 +'0' << endl;
+    cout << 'B' - '0'<< endl;
     return 0;
 }
 
@@ -35,7 +36,14 @@ string inputBigNumber() //ввод числа
     return value;
 }
 
-string operations(char sign, string &firstNumb, string &secondNumb)  //
+char inputSignAndBase() // ввод арифметического действия и системы счисления
+{
+    char sign = {};
+    cin >> sign;
+    return sign;
+}
+
+string operations(char sign, string &firstNumb, string &secondNumb)  //функция, где происходит весь счет.
 {
     string answer = "";
     int maxLength = (int) firstNumb.length();
@@ -43,9 +51,18 @@ string operations(char sign, string &firstNumb, string &secondNumb)  //
     maxLength = (int)firstNumb.length() - 1;
     for (int i = maxLength - 1; i >= 0; i--)
     {
+        if (i == maxLength - 1)
+        {
+            //прибавить +1 к числу;
+            
+        }
+        if (i == 0 )
+        {
+            //отнять 1 от числа;
+        }
       //Не потерять
     }
-    return 0;
+    return answer;
 }
 
 void giveNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и записывает его в firstNumb
@@ -92,7 +109,7 @@ int convertNumb(char numb)  //Конвертирует символ в числ�
     int intNumb = numb - '0';
     if ((numb - '0') > 9)
     {
-        intNumb -= 6;
+        intNumb -= 7;
     }
     return intNumb;
 }
@@ -115,7 +132,9 @@ char action(char sign, int a, int b, int base, int &ost)   //Складывае�
             break;
         }
         case '-':{
-            // Сделать
+            a += 9 - b + ost; //вычитание по школьному
+            ost = a / base;
+            a = a % base;
             break;
         }
         case '/':{
