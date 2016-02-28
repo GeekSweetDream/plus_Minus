@@ -13,8 +13,8 @@ using namespace std;
 
 
 string inputBigNumber();
-string operations(char sign, string &firstNumb, string &secondNumb);
-void giveNumbMax(string &firstNumb, string &secondNumb);
+string getAnswer(char sign, string &firstNumb, string &secondNumb);
+void changeNumbMax(string &firstNumb, string &secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 void changeStr(string &firstStr, string &secondStr);
@@ -24,7 +24,7 @@ char action(int sign, int a, int b, int base, int &ost);
 int main(int argc, const char * argv[])
 {
     string test = "0123";
-    cout << 22 +'0' << endl;
+    cout << 123 << endl;
     cout << 'B' - '0'<< endl;
     return 0;
 }
@@ -43,14 +43,16 @@ char inputSignAndBase() // ввод арифметического действ�
     return sign;
 }
 
-string operations(char sign, string &firstNumb, string &secondNumb)  //функция, где происходит весь счет.
+string getAnswer(char sign, string &firstNumb, string &secondNumb)  //функция, где происходит весь счет.
 {
     string answer = "";
     int maxLength = (int) firstNumb.length();
-    giveNumbMax(firstNumb, secondNumb);
+    changeNumbMax(firstNumb, secondNumb);
     maxLength = (int)firstNumb.length() - 1;
     for (int i = maxLength - 1; i >= 0; i--)
     {
+        // Добавить
+    
         if (i == maxLength - 1)
         {
             //прибавить +1 к числу;
@@ -60,12 +62,11 @@ string operations(char sign, string &firstNumb, string &secondNumb)  //функ�
         {
             //отнять 1 от числа;
         }
-      //Не потерять
     }
     return answer;
 }
 
-void giveNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и записывает его в firstNumb
+void changeNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и записывает его в firstNumb
 {
     if (firstNumb.length() < secondNumb.length())
     {
