@@ -133,7 +133,7 @@ char action(char sign, int a, int b, int base, int &ost)   //Складывае�
             break;
         }
         case '-':{
-            a += 9 - b + ost; //вычитание по школьному
+            a += (base - 1) - b + ost; //вычитание по школьному
             ost = a / base;
             a = a % base;
             break;
