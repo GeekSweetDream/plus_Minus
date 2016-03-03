@@ -12,14 +12,14 @@
 using namespace std;
 
 
-string inputBigNumber();
-string getAnswer(char sign, string &firstNumb, string &secondNumb);
+string inputValue();
+int inputBase();
+string getAnswer(char sign, int base, string firstNumb, string secondNumb);
 void changeNumbMax(string &firstNumb, string &secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 void changeStr(string &firstStr, string &secondStr);
-char inputSign();
-char action(int sign, int a, int b, int base, int &ost);
+char action(char sign, int a, int b, int base, int &ost);
 
 int main(int argc, const char * argv[])
 {
@@ -27,43 +27,56 @@ int main(int argc, const char * argv[])
     int sup = 17+48;
     char p = static_cast<char>(sup);
     cout << p << endl;
-    cout << 'B' - '0'<< endl;
+    string one = "23", two = "25";
+    changeNumbMax(one, two);
+    cout << one << " " << two <<endl;
+
+    cout << getAnswer('+', 10, "123", "23") << endl;
+    
     return 0;
 }
 
-string inputBigNumber() //ввод числа
+string inputValue() //ввод чисел и знака
 {
     string value = "";
     cin >> value;
     return value;
 }
 
-char inputSignAndBase() // ввод арифметического действия и системы счисления
+int inputBase()
 {
-    char sign = {};
-    cin >> sign;
-    return sign;
+    int base = 10;
+    cin >> base;
+    return base;
 }
 
-string getAnswer(char sign, string &firstNumb, string &secondNumb)  //функция, где происходит весь счет.
+string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //функция, где происходит весь счет.
 {
     string answer = "";
-    int maxLength = (int) firstNumb.length();
     changeNumbMax(firstNumb, secondNumb);
-    maxLength = (int)firstNumb.length() - 1;
-    for (int i = maxLength - 1; i >= 0; i--)
+    int maxLength = (int)firstNumb.length() - 1;
+    int ost = 0;
+    for (int i = maxLength; i >= 0; i--)
     {
         // Добавить
-    
-        if (i == maxLength - 1)
+        int numberOne = convertNumb(firstNumb[i]);
+        int numberTwo = 0;
+        if ((i - ((int)firstNumb.length() - (int)secondNumb.length())) >= 0)
+        {
+             numberTwo = convertNumb(secondNumb[i - (firstNumb.length() - secondNumb.length())]);
+        }
+        if ((sign == '-') && (i == maxLength - 1))
         {
             //прибавить +1 к числу;
+            numberOne++;
             
         }
-        if (i == 0 )
+        if ((sign == '-' ) && (i == 0 ))
         {
             //отнять 1 от числа;
+            numberOne--;
         }
+        answer = action(sign, numberOne, numberTwo, base, ost) + answer;
     }
     return answer;
 }
@@ -97,7 +110,7 @@ int equalMax(string firstNumb, string secondNumb)  // сравнивает дв�
     int max = 0;
     for(int i = (int)firstNumb.length() - 1; i >= 0; i--)
     {
-        if((firstNumb[i] - '0') < (secondNumb[i] - '0'))
+        if((convertNumb(firstNumb[i])) < (convertNumb(secondNumb[i])))
         {
             max = 1;
             break;
@@ -144,7 +157,7 @@ char action(char sign, int a, int b, int base, int &ost)   //Складывае�
             break;
         }
     }
-    return static_cast<char>(a + '0');
+    return static_cast<char>( a + '0' );
 }
 
 
