@@ -31,7 +31,7 @@ int main(int argc, const char * argv[])
     changeNumbMax(one, two);
     cout << one << " " << two <<endl;
 
-    cout << getAnswer('+', 10, "123", "23") << endl;
+    cout << getAnswer('+', 10, "5", "5") << endl;
     
     return 0;
 }
@@ -77,6 +77,10 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
             numberOne--;
         }
         answer = action(sign, numberOne, numberTwo, base, ost) + answer;
+    }
+    if (ost != 0)
+    {
+        answer = static_cast<char>(ost + '0') + answer;
     }
     return answer;
 }
