@@ -24,7 +24,9 @@ char action(int sign, int a, int b, int base, int &ost);
 int main(int argc, const char * argv[])
 {
     string test = "0123";
-    cout << 123 << endl;
+    int sup = 17+48;
+    char p = static_cast<char>(sup);
+    cout << p << endl;
     cout << 'B' - '0'<< endl;
     return 0;
 }
@@ -117,7 +119,6 @@ int convertNumb(char numb)  //Конвертирует символ в числ�
 
 char action(char sign, int a, int b, int base, int &ost)   //Складывает части числа
 {
-    char answer = {};
     switch (sign)
     {
         case '+':{
@@ -143,7 +144,7 @@ char action(char sign, int a, int b, int base, int &ost)   //Складывае�
             break;
         }
     }
-    return answer+a ;
+    return static_cast<char>(a + '0');
 }
 
 
