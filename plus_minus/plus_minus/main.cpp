@@ -9,29 +9,35 @@
 #include <iostream>
 #include <string>
 
+
 using namespace std;
 
 
 string inputValue();
 int inputBase();
 string getAnswer(char sign, int base, string firstNumb, string secondNumb);
-void changeNumbMax(string &firstNumb, string &secondNumb);
+bool changeNumbMax(string &firstNumb, string &secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 void changeStr(string &firstStr, string &secondStr);
 char action(char sign, int a, int b, int base, int &ost);
+void turnString(string &str, int begin, int end);
+string additionNumber(string firstNumber, string secondNumber, int base);
+string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base, int &ost, int begin, int end);
+
 
 int main(int argc, const char * argv[])
 {
     string test = "0123";
     int sup = 17+48;
     char p = static_cast<char>(sup);
-    cout << p << endl;
+    cout << p + 1 << endl;
     string one = "23", two = "25";
+    cout << 1 << endl;
     changeNumbMax(one, two);
     cout << one << " " << two <<endl;
 
-    cout << getAnswer('+', 10, "5", "5") << endl;
+    cout << getAnswer('-', 10, "25", "5") << endl;
     
     return 0;
 }
@@ -53,53 +59,151 @@ int inputBase()
 string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //функция, где происходит весь счет.
 {
     string answer = "";
-    changeNumbMax(firstNumb, secondNumb);
-    int maxLength = (int)firstNumb.length() - 1;
-    int ost = 0;
-    for (int i = maxLength; i >= 0; i--)
+    if (changeNumbMax(firstNumb, secondNumb))
     {
-        // Добавить
-        int numberOne = convertNumb(firstNumb[i]);
-        int numberTwo = 0;
-        if ((i - ((int)firstNumb.length() - (int)secondNumb.length())) >= 0)
+        int maxLength = (int)firstNumb.length() - 1;
+        int ost = 0;
+        switch (sign)
         {
-             numberTwo = convertNumb(secondNumb[i - (firstNumb.length() - secondNumb.length())]);
+            case '+':{
+                answer = additionNumber(firstNumb, secondNumb, base);
+                break;
+            }
+            case '-':break;
+            case '*':break;
+            case '/':break;
         }
-        if ((sign == '-') && (i == maxLength - 1))
-        {
-            //прибавить +1 к числу;
-            numberOne++;
+            /*   // Добавить
+             int numberOne = convertNumb(firstNumb[i]);
+             int numberTwo = 0;
+             if ((i - ((int)firstNumb.length() - (int)secondNumb.length())) >= 0)
+             {
+                numberTwo = convertNumb(secondNumb[i - (firstNumb.length() - secondNumb.length())]);
+             }
+             if ((sign == '-') && (i == maxLength - 1))
+             {
+             //прибавить +1 к числу;
+                numberOne++;
             
-        }
-        if ((sign == '-' ) && (i == 0 ))
+             }
+             if ((sign == '-' ) && (i == 0 ))
+             {
+             //отнять 1 от числа;
+                numberOne--;
+             }
+             answer = action(sign, numberOne, numberTwo, base, ost) + answer;
+             */
+    }else
+    {
+     answer = "Error, wrong numbers, the second number is greater than the second number!";
+    }
+   // if (ost != 0)
+   // {
+   //     answer = static_cast<char>(ost + '0') + answer;
+   // }
+    return answer;
+}
+
+string additionNumber(string firstNumber, string secondNumber, int base)
+{
+    string answer = "";
+    int ost = 0;
+    turnString(firstNumber, 0, firstNumber.length() - 1);
+    turnString(secondNumber, 0, secondNumber.length() - 1);
+  /*  for(int i = 0; i <= secondNumber.length() - 1; i++)
+    {
+        
+        int count = convertNumb(firstNumber[i]) + convertNumb(secondNumber[i]) + ost;
+        ost = count / base;
+        count = count % base;
+        if (count > 9)
         {
-            //отнять 1 от числа;
-            numberOne--;
+            answer += static_cast<char>(count + '0' + 7);
+            continue;
         }
-        answer = action(sign, numberOne, numberTwo, base, ost) + answer;
+        answer += static_cast<char>(count + '0');
+    }*/
+    answer = helpAdd(firstNumber, secondNumber, 1, base, ost, (int)secondNumber.length() - 1, (int)firstNumber.length() - 1);
+    if (firstNumber.length() != secondNumber.length())
+    {
+       /* for(int i = (int)secondNumber.length() - 1; i <= firstNumber.length(); i++)
+        {
+            int count = convertNumb(firstNumber[i]) + ost;
+            ost = count / base;
+            count = count % base;
+            if(count > 9)
+            {
+                answer += static_cast<char>(count + '0' + 7);
+                continue;
+            }
+            answer += static_cast<char>(count + '0');
+        }*/
+        answer += helpAdd(firstNumber, secondNumber, 0, base, ost, (int)firstNumber.length() - 1, (int)secondNumber.length() - 1);
     }
     if (ost != 0)
     {
-        answer = static_cast<char>(ost + '0') + answer;
+        if(ost > 9)
+        {
+            answer += static_cast<char>(ost + '0' + 7);
+        }else
+        {
+            answer += static_cast<char>(ost + '0');
+        }
+    }
+    turnString(answer, 0, (int)answer.length() - 1);
+    return answer;
+}
+
+string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base, int &ost, int begin, int end)
+{
+    string answer = "";
+    for(int i = begin; i <= end; i++)
+    {
+        int count = convertNumb(firstNumber[i]) + convertNumb(secondNumber[i]) + ost;
+        if (addSecNumb)
+        {
+            count += convertNumb(secondNumber[i]);
+        }
+        ost = count / base;
+        count = count % base;
+        if (count > 9)
+        {
+            answer += static_cast<char>(count + '0' + 7);
+            continue;
+        }
+        answer += static_cast<char>(count + '0');
     }
     return answer;
 }
 
-void changeNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и записывает его в firstNumb
+void turnString(string &str, int begin, int end)  //Переворачивает строку
+{
+    for (int i = begin; i < (end / 2); i++)
+    {
+        char symb = str[i];
+        str[i] = str[end - i];
+        str[end - i] = symb;
+    }
+}
+
+bool changeNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и (записывает его в firstNumb)
 {
     if (firstNumb.length() < secondNumb.length())
     {
-        changeStr(firstNumb, secondNumb);
+        return false;
+       // changeStr(firstNumb, secondNumb);                 //Eсли первое число меньше второго мы выводим false
     }else
     {
         if ((firstNumb.length() == secondNumb.length()))
         {
             if(equalMax(firstNumb,secondNumb))
             {
-                changeStr(firstNumb, secondNumb);
+                return false;
+               // changeStr(firstNumb, secondNumb);
             }
         }
     }
+    return true;
 }
 
 void changeStr(string &firstStr, string &secondStr) // меняет местами строки
@@ -134,6 +238,7 @@ int convertNumb(char numb)  //Конвертирует символ в числ�
     return intNumb;
 }
 
+/*
 char action(char sign, int a, int b, int base, int &ost)   //Складывает части числа
 {
     switch (sign)
@@ -163,6 +268,7 @@ char action(char sign, int a, int b, int base, int &ost)   //Складывае�
     }
     return static_cast<char>( a + '0' );
 }
+ */
 
 
 
