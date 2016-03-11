@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include <string>
-#include <cstring>
 
 
 using namespace std;
@@ -194,7 +193,7 @@ int convertNumb(char numb)  //Конвертирует символ в числ�
     return intNumb;
 }
 
-string subtractionNumber(string firstNumb, string secondNumb, int base)
+string subtractionNumber(string firstNumb, string secondNumb, int base) // Вычитание
 {
     string answer = "";
     int ost = 0;
