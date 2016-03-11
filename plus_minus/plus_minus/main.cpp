@@ -32,12 +32,12 @@ int main(int argc, const char * argv[])
     int sup = 17+48;
     char p = static_cast<char>(sup);
     cout << p + 1 << endl;
-    string one = "23", two = "25";
+    string one = "23", two = "125";
     cout << 1 << endl;
-    changeNumbMax(one, two);
+    turnString(two, 0, two.length() - 1);
     cout << one << " " << two <<endl;
 
-    cout << getAnswer('-', 10, "25", "5") << endl;
+    cout << getAnswer('+', 10, "5", "5") << endl;
     
     return 0;
 }
@@ -61,8 +61,6 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
     string answer = "";
     if (changeNumbMax(firstNumb, secondNumb))
     {
-        int maxLength = (int)firstNumb.length() - 1;
-        int ost = 0;
         switch (sign)
         {
             case '+':{
@@ -108,8 +106,8 @@ string additionNumber(string firstNumber, string secondNumber, int base)
 {
     string answer = "";
     int ost = 0;
-    turnString(firstNumber, 0, firstNumber.length() - 1);
-    turnString(secondNumber, 0, secondNumber.length() - 1);
+    turnString(firstNumber, 0, (int)firstNumber.length() - 1);
+    turnString(secondNumber, 0, (int)secondNumber.length() - 1);
   /*  for(int i = 0; i <= secondNumber.length() - 1; i++)
     {
         
@@ -123,7 +121,7 @@ string additionNumber(string firstNumber, string secondNumber, int base)
         }
         answer += static_cast<char>(count + '0');
     }*/
-    answer = helpAdd(firstNumber, secondNumber, 1, base, ost, (int)secondNumber.length() - 1, (int)firstNumber.length() - 1);
+    answer = helpAdd(firstNumber, secondNumber, 1, base, ost, 0, (int)secondNumber.length() - 1);
     if (firstNumber.length() != secondNumber.length())
     {
        /* for(int i = (int)secondNumber.length() - 1; i <= firstNumber.length(); i++)
@@ -138,7 +136,7 @@ string additionNumber(string firstNumber, string secondNumber, int base)
             }
             answer += static_cast<char>(count + '0');
         }*/
-        answer += helpAdd(firstNumber, secondNumber, 0, base, ost, (int)firstNumber.length() - 1, (int)secondNumber.length() - 1);
+        answer += helpAdd(firstNumber, secondNumber, 0, base, ost, (int)secondNumber.length(),(int)firstNumber.length() - 1);
     }
     if (ost != 0)
     {
@@ -159,7 +157,7 @@ string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base,
     string answer = "";
     for(int i = begin; i <= end; i++)
     {
-        int count = convertNumb(firstNumber[i]) + convertNumb(secondNumber[i]) + ost;
+        int count = convertNumb(firstNumber[i]) + ost;
         if (addSecNumb)
         {
             count += convertNumb(secondNumber[i]);
@@ -178,7 +176,7 @@ string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base,
 
 void turnString(string &str, int begin, int end)  //Переворачивает строку
 {
-    for (int i = begin; i < (end / 2); i++)
+    for (int i = begin; i <= (end / 2); i++)
     {
         char symb = str[i];
         str[i] = str[end - i];
