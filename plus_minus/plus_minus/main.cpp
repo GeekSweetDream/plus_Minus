@@ -80,26 +80,6 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
             case '*':break;
             case '/':break;
         }
-            /*   // Добавить
-             int numberOne = convertNumb(firstNumb[i]);
-             int numberTwo = 0;
-             if ((i - ((int)firstNumb.length() - (int)secondNumb.length())) >= 0)
-             {
-                numberTwo = convertNumb(secondNumb[i - (firstNumb.length() - secondNumb.length())]);
-             }
-             if ((sign == '-') && (i == maxLength - 1))
-             {
-             //прибавить +1 к числу;
-                numberOne++;
-            
-             }
-             if ((sign == '-' ) && (i == 0 ))
-             {
-             //отнять 1 от числа;
-                numberOne--;
-             }
-             answer = action(sign, numberOne, numberTwo, base, ost) + answer;
-             */
     }else
     {
      answer = "Error, wrong numbers, the second number is greater than the second number!";
