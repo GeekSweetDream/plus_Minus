@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 
 
 using namespace std;
@@ -24,6 +25,8 @@ char action(char sign, int a, int b, int base, int &ost);
 void turnString(string &str, int begin, int end);
 string additionNumber(string firstNumber, string secondNumber, int base);
 string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base, int &ost, int begin, int end);
+string subtractionNumber(string firstNumb, string secondNumb, int base);
+void removeZeroInStr(string &str, int begin, int end);
 
 
 int main(int argc, const char * argv[])
@@ -34,10 +37,11 @@ int main(int argc, const char * argv[])
     cout << p + 1 << endl;
     string one = "23", two = "125";
     cout << 1 << endl;
-    turnString(two, 0, two.length() - 1);
+    turnString(two, 0, (int)two.length() - 1);
     cout << one << " " << two <<endl;
 
-    cout << getAnswer('+', 10, "5", "5") << endl;
+    cout << getAnswer('+', 10, "33", "32") << endl;
+    cout << getAnswer('-', 10, "1133", "1132") << endl;
     
     return 0;
 }
@@ -59,6 +63,8 @@ int inputBase()
 string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //функция, где происходит весь счет.
 {
     string answer = "";
+    turnString(firstNumb, 0, (int)firstNumb.length() - 1);
+    turnString(secondNumb, 0, (int)secondNumb.length() - 1);
     if (changeNumbMax(firstNumb, secondNumb))
     {
         switch (sign)
@@ -67,7 +73,10 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
                 answer = additionNumber(firstNumb, secondNumb, base);
                 break;
             }
-            case '-':break;
+            case '-':{
+                answer = subtractionNumber(firstNumb, secondNumb, base);
+                break;
+            }
             case '*':break;
             case '/':break;
         }
@@ -95,10 +104,6 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
     {
      answer = "Error, wrong numbers, the second number is greater than the second number!";
     }
-   // if (ost != 0)
-   // {
-   //     answer = static_cast<char>(ost + '0') + answer;
-   // }
     return answer;
 }
 
@@ -106,36 +111,9 @@ string additionNumber(string firstNumber, string secondNumber, int base)
 {
     string answer = "";
     int ost = 0;
-    turnString(firstNumber, 0, (int)firstNumber.length() - 1);
-    turnString(secondNumber, 0, (int)secondNumber.length() - 1);
-  /*  for(int i = 0; i <= secondNumber.length() - 1; i++)
-    {
-        
-        int count = convertNumb(firstNumber[i]) + convertNumb(secondNumber[i]) + ost;
-        ost = count / base;
-        count = count % base;
-        if (count > 9)
-        {
-            answer += static_cast<char>(count + '0' + 7);
-            continue;
-        }
-        answer += static_cast<char>(count + '0');
-    }*/
     answer = helpAdd(firstNumber, secondNumber, 1, base, ost, 0, (int)secondNumber.length() - 1);
     if (firstNumber.length() != secondNumber.length())
     {
-       /* for(int i = (int)secondNumber.length() - 1; i <= firstNumber.length(); i++)
-        {
-            int count = convertNumb(firstNumber[i]) + ost;
-            ost = count / base;
-            count = count % base;
-            if(count > 9)
-            {
-                answer += static_cast<char>(count + '0' + 7);
-                continue;
-            }
-            answer += static_cast<char>(count + '0');
-        }*/
         answer += helpAdd(firstNumber, secondNumber, 0, base, ost, (int)secondNumber.length(),(int)firstNumber.length() - 1);
     }
     if (ost != 0)
@@ -236,40 +214,54 @@ int convertNumb(char numb)  //Конвертирует символ в числ�
     return intNumb;
 }
 
-/*
-char action(char sign, int a, int b, int base, int &ost)   //Складывает части числа
+string subtractionNumber(string firstNumb, string secondNumb, int base)
 {
-    switch (sign)
+    string answer = "";
+    int ost = 0;
+    for(int i = 0; i <= (int)secondNumb.length() - 1; i++)
     {
-        case '+':{
-            a += b + ost;
-            ost = a / base;
-            a = a % base;
-            break;
+        int diff = convertNumb(firstNumb[i]) - convertNumb(secondNumb[i]) + ost + 9;
+        if( i == 0)
+        {
+            diff += 1;
         }
-        case '*':{
-            a *= b + ost;
-            ost = a / base;
-            a = a % base;
-            break;
+        ost = diff / base;
+        diff = diff % base;
+        if (diff > 9)
+        {
+            answer += static_cast<char>(diff + '0' + 7);
+            continue;
         }
-        case '-':{
-            a += (base - 1) - b + ost; //вычитание по школьному
-            ost = a / base;
-            a = a % base;
-            break;
+        answer += static_cast<char>(diff + '0');
+    }
+    if(firstNumb.length() != secondNumb.length())
+    {
+        firstNumb[secondNumb.length()] -= 1;
+        int diff = convertNumb(firstNumb[secondNumb.length()]) + ost;
+        if( diff > 9)
+        {
+            answer += static_cast<char>(diff + '0' + 7);
         }
-        case '/':{
-            //сделать
-            break;
+        answer += static_cast<char>(diff + '0');
+        for (int i = (int)secondNumb.length() + 1; i <= firstNumb.length() - 1; i++)
+        {
+            answer += firstNumb[i];
         }
     }
-    return static_cast<char>( a + '0' );
+    turnString(answer, 0, (int)answer.length() - 1);
+    removeZeroInStr(answer, 0, (int)answer.length() - 1);
+    return answer;
 }
- */
 
-
-
+void removeZeroInStr(string &str, int begin, int end)
+{
+    int i = 0;
+    while( str[i] == '0')
+    {
+        i++;
+    }
+    str = str.substr(i,str.length());
+}
 
 
 
