@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 
 using namespace std;
@@ -25,8 +26,8 @@ void turnString(string &str, int begin, int end);
 string additionNumber(string firstNumber, string secondNumber, int base);
 string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base, int &ost, int begin, int end);
 string subtractionNumber(string firstNumb, string secondNumb, int base);
-void removeZeroInStr(string &str, int begin, int end);
-
+void removeZeroInStr(string &str);
+string multiplicationNumber(string firstNumb, string secondNumb, int base);
 
 int main(int argc, const char * argv[])
 {
@@ -41,6 +42,7 @@ int main(int argc, const char * argv[])
 
     cout << getAnswer('+', 10, "33", "32") << endl;
     cout << getAnswer('-', 10, "1133", "1132") << endl;
+    cout << getAnswer('*', 10, "1000", "15") << endl;
     
     return 0;
 }
@@ -76,7 +78,10 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
                 answer = subtractionNumber(firstNumb, secondNumb, base);
                 break;
             }
-            case '*':break;
+            case '*':{
+                answer = multiplicationNumber(firstNumb, secondNumb, base);
+                break;
+            }
             case '/':break;
         }
     }else
@@ -120,7 +125,7 @@ string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base,
             count += convertNumb(secondNumber[i]);
         }
         ost = count / base;
-        count = count % base;
+        count %= base;
         if (count > 9)
         {
             answer += static_cast<char>(count + '0' + 7);
@@ -199,7 +204,7 @@ string subtractionNumber(string firstNumb, string secondNumb, int base) // Вы�
     int ost = 0;
     for(int i = 0; i <= (int)secondNumb.length() - 1; i++)
     {
-        int diff = convertNumb(firstNumb[i]) - convertNumb(secondNumb[i]) + ost + 9;
+        int diff = convertNumb(firstNumb[i]) - convertNumb(secondNumb[i]) + ost + (base - 1);
         if( i == 0)
         {
             diff += 1;
@@ -228,11 +233,11 @@ string subtractionNumber(string firstNumb, string secondNumb, int base) // Вы�
         }
     }
     turnString(answer, 0, (int)answer.length() - 1);
-    removeZeroInStr(answer, 0, (int)answer.length() - 1);
+    removeZeroInStr(answer);
     return answer;
 }
 
-void removeZeroInStr(string &str, int begin, int end)
+void removeZeroInStr(string &str)
 {
     int i = 0;
     while( str[i] == '0')
@@ -242,5 +247,31 @@ void removeZeroInStr(string &str, int begin, int end)
     str = str.substr(i,str.length());
 }
 
-
+string multiplicationNumber(string firstNumb, string secondNumb, int base)
+{
+    int sizeNumb = (int)(firstNumb.length() + secondNumb.length());
+    string answer = "";
+    vector<int> thirdNumb(sizeNumb);
+    for (int i = 0; i < firstNumb.length(); i++)
+    {
+        for(int j = 0; j < secondNumb.length(); j++)
+        {
+            thirdNumb[i + j] += convertNumb(firstNumb[i]) * convertNumb(secondNumb[j]);
+        }
+    }
+    for (int i = 0; i < sizeNumb; i++)
+    {
+        thirdNumb[i + 1] += thirdNumb[i] / base;
+        thirdNumb[i] %= base;
+        if (thirdNumb[i] > 9)
+        {
+            answer += static_cast<char>(thirdNumb[i] + '0' + 7);
+            continue;
+        }
+        answer += static_cast<char>(thirdNumb[i] + '0');
+    }
+    turnString(answer, 0, (int)answer.length() - 1);
+    removeZeroInStr(answer);
+    return answer;
+}
 
