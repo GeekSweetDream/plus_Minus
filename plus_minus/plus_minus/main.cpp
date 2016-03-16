@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 
 using namespace std;
@@ -20,13 +21,17 @@ bool changeNumbMax(string &firstNumb, string &secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 int inputBase();
+int findFactorForDivider(int base, long divident, long divider);
+int getNumberForDivision(string number, int size, int base);
 char action(char sign, int a, int b, int base, int &ost);
+char getNumberOrLetter(int number);
 string multiplicationNumber(string firstNumb, string secondNumb, int base);
 string additionNumber(string firstNumber, string secondNumber, int base);
 string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base, int &ost, int begin, int end);
 string subtractionNumber(string firstNumb, string secondNumb, int base);
 string inputValue();
 string getAnswer(char sign, int base, string firstNumb, string secondNumb);
+string divisionNumber(string firstNumb, string seconNumb, int base);
 
 int main(int argc, const char * argv[])
 {
@@ -38,10 +43,13 @@ int main(int argc, const char * argv[])
     cout << 1 << endl;
     turnString(two, 0, (int)two.length() - 1);
     cout << one << " " << two <<endl;
-
-    cout << getAnswer('+', 2, "1", "1") << endl;
-    cout << getAnswer('-', 10, "133", "132") << endl;
-    cout << getAnswer('*', 10, "16", "2") << endl;
+    
+    cout << findFactorForDivider(10, 100, 34) << endl;
+    
+    cout << getAnswer('+', 16, "25", "6") << endl;
+    cout << getAnswer('-', 10, "133", "133") << endl;
+    cout << getAnswer('*', 10, "25", "4") << endl;
+    cout << getAnswer('/', 10, "100", "20") << endl;
     
     return 0;
 }
@@ -81,7 +89,10 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
                 answer = multiplicationNumber(firstNumb, secondNumb, base);
                 break;
             }
-            case '/':break;
+            case '/':{
+                answer = divisionNumber(firstNumb, secondNumb, base);
+                break;
+            }
         }
     }else
     {
@@ -125,12 +136,7 @@ string helpAdd(string firstNumber, string secondNumber, int addSecNumb,int base,
         }
         ost = count / base;                             // вычисляем остаток, который прибавляем к след. разряду
         count %= base;                                  // вычисляем остаток, который сохраняем в этом разряде
-        if (count > 9)
-        {
-            answer += static_cast<char>(count + '0' + 7); // перевод из инта в чар
-            continue;
-        }
-        answer += static_cast<char>(count + '0');
+        answer += getNumberOrLetter(count);
     }
     return answer;
 }
@@ -209,23 +215,14 @@ string subtractionNumber(string firstNumb, string secondNumb, int base) // Вы�
             diff += 1;
         }
         ost = diff / base;
-        diff = diff % base;
-        if (diff > 9)
-        {
-            answer += static_cast<char>(diff + '0' + 7);
-            continue;
-        }
-        answer += static_cast<char>(diff + '0');
+        diff %= base;
+        answer += getNumberOrLetter(diff);
     }
     if(firstNumb.length() != secondNumb.length())
     {
         firstNumb[secondNumb.length()] -= 1;
         int diff = convertNumb(firstNumb[secondNumb.length()]) + ost;
-        if( diff > 9)
-        {
-            answer += static_cast<char>(diff + '0' + 7);
-        }
-        answer += static_cast<char>(diff + '0');
+        answer += getNumberOrLetter(diff);
         for (int i = (int)secondNumb.length() + 1; i <= firstNumb.length() - 1; i++)
         {
             answer += firstNumb[i];
@@ -258,19 +255,89 @@ string multiplicationNumber(string firstNumb, string secondNumb, int base)      
             thirdNumb[i + j] += convertNumb(firstNumb[i]) * convertNumb(secondNumb[j]); //циклом заполняем умножая две
         }                                                                               //цифры
     }
-    for (int i = 0; i < sizeNumb; i++)                              // циклом проходим по вектору и вычисляем остатки
+    for (int i = 0; i < (sizeNumb - 1); i++)                              // циклом проходим по вектору и вычисляем остатки
     {
         thirdNumb[i + 1] += thirdNumb[i] / base;                    // вычисляем остаток и прибавляем к следующему разряду
         thirdNumb[i] %= base;                                       // другой остаток записываем в этот разряд
-        if (thirdNumb[i] > 9)
-        {
-            answer += static_cast<char>(thirdNumb[i] + '0' + 7);    // перевод из инта в чар
-            continue;
-        }
-        answer += static_cast<char>(thirdNumb[i] + '0');
+        answer += getNumberOrLetter(thirdNumb[i]);
     }
+    thirdNumb[sizeNumb - 1] %= base;                                       // другой остаток записываем в этот разряд
+    answer += getNumberOrLetter(thirdNumb[sizeNumb - 1]);
     turnString(answer, 0, (int)answer.length() - 1);                // переворот строки
     removeZeroInStr(answer);                                        // удаление ведущих нулей
     return answer;
 }
+
+char getNumberOrLetter(int number)                        //Функция, выдающая в зависимости от кода букву или цифру
+{
+    char answer = {};
+    if (number > 9)
+    {
+        answer = static_cast<char>(number + '0' + 7);    // перевод из инта в чар
+    }else
+    {
+        answer = static_cast<char>(number + '0');
+    }
+    return answer;
+    
+}
+
+string divisionNumber(string firstNumb, string seconNumb, int base)
+{
+    string answer = "";
+    turnString(firstNumb, 0, (int) firstNumb.length() - 1);
+    turnString(seconNumb, 0, (int)seconNumb.length() - 1);
+    while(firstNumb.length()>= seconNumb.length())
+    {
+        long numbOne = getNumberForDivision(firstNumb, (int)firstNumb.length(), base);
+        long numbTwo = getNumberForDivision(seconNumb, (int)seconNumb.length(), base);
+        if (numbOne < numbTwo)
+        {
+            numbOne += convertNumb(firstNumb[seconNumb.length()]) * pow(base,seconNumb.length());
+        }
+        answer += static_cast<char>(findFactorForDivider(base, numbOne, numbTwo) + '0');
+        firstNumb = subtractionNumber(firstNumb, seconNumb, base);
+    }
+    return answer;
+}
+
+int findFactorForDivider(int base, long divident, long divider)
+{
+    int left = 0;
+    int x = 0;
+    int right = base;
+    while (left <= right)
+    {
+        int middle = (left + right) / 2;
+        if (divider * middle <= divident)
+        {
+            x = middle;
+            left = middle + 1;
+        }else
+        {
+            right = middle - 1;
+        }
+    }
+    return right;
+}
+
+int getNumberForDivision(string number, int size, int base)
+{
+    int answer = convertNumb(number[0]);
+    for (int i = 1; i <= size - 1; i++)
+    {
+        answer += convertNumb(number[i]) * (pow(base,i));
+    }
+    return answer;
+}
+
+
+
+
+
+
+
+
+
+
 
