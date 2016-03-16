@@ -46,7 +46,7 @@ int main(int argc, const char * argv[])
     
     cout << findFactorForDivider(10, 100, 34) << endl;
     
-    cout << getAnswer('+', 16, "25", "6") << endl;
+    cout << getAnswer('+', 16, "25", "6s") << endl;
     cout << getAnswer('-', 10, "133", "133") << endl;
     cout << getAnswer('*', 10, "25", "4") << endl;
     cout << getAnswer('/', 10, "100", "20") << endl;
@@ -236,7 +236,7 @@ string subtractionNumber(string firstNumb, string secondNumb, int base) // Вы�
 void removeZeroInStr(string &str)       //Удаление ведущих нулей
 {
     int i = 0;
-    while( (str[i] == '0') and (i < str.length() - 1))
+    while( (str[i] == '0') && (i < str.length() - 1))
     {
         i++;
     }
