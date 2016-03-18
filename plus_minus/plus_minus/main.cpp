@@ -320,10 +320,12 @@ string divisionNumber(string firstNumb, string seconNumb, int base)
         string subtrahend = "";
         subtrahend += getNumberOrLetter(findFactorForDivider(base, divident, seconNumb));
         turnString(subtrahend, 0, (int) subtrahend.length() - 1);
-        firstNumb = subtractionNumber(firstNumb, multiplicationNumber(seconNumb, subtrahend, base), base);
         answer += subtrahend;
+        subtrahend = multiplicationNumber(seconNumb, subtrahend, base);
+        turnString(subtrahend, 0, (int) subtrahend.length() - 1);
+        firstNumb = subtractionNumber(firstNumb, subtrahend, base);
     }
-    turnString(answer, 0, (int) answer.length());
+    turnString(answer, 0, (int) answer.length() - 1);
     return answer;
 }
 
@@ -347,7 +349,7 @@ int findFactorForDivider(int base, string divident, string divider)
             right = middle - 1;
         }
     }
-    return right;
+    return left;
 }
 
 int getNumberForDivision(string number, int size, int base)
