@@ -35,16 +35,6 @@ string divisionNumber(string firstNumb, string seconNumb, int base);
 
 int main(int argc, const char * argv[])
 {
-  /*  string test = "0123";
-    int sup = 17+48;
-    char p = static_cast<char>(sup);
-    cout << p + 1 << endl;
-    string one = "23", two = "125";
-    cout << 1 << endl;
-    turnString(two, 0, (int)two.length() - 1);
-    cout << one << " " << two <<endl;
-    
-    cout << findFactorForDivider(10, 100, 34) << endl;*/
     
     cout << "+ " << getAnswer('+', 10, "2", "26") << endl;
     cout << "- " << getAnswer('-', 10, "133", "134") << endl;
@@ -322,8 +312,8 @@ int findFactorForDivider(int base, string divident, string divider)
     int right = base;
     while (left <= right)
     {
-        string factor = "";
         int middle = (left + right) / 2;
+        string factor = "";
         factor += getNumberOrLetter(middle);
         string composition = multiplicationNumber(divider, factor, base);
         if (comparisonNumb(divident, composition))
