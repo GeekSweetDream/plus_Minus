@@ -23,7 +23,6 @@ int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 int inputBase();
 int findFactorForDivider(int base, string divident, string divider);
-int getNumberForDivision(string number, int size, int base);
 char action(char sign, int a, int b, int base, int &ost);
 char getNumberOrLetter(int number);
 string multiplicationNumber(string firstNumb, string secondNumb, int base);
@@ -297,19 +296,6 @@ char getNumberOrLetter(int number)                        //Функция, вы
 string divisionNumber(string firstNumb, string seconNumb, int base)
 {
     string answer = "";
-  /*  turnString(firstNumb, 0, (int) firstNumb.length() - 1);
-    turnString(seconNumb, 0, (int)seconNumb.length() - 1);
-    while(firstNumb.length()>= seconNumb.length())
-    {
-        long numbOne = getNumberForDivision(firstNumb, (int)firstNumb.length(), base);
-        long numbTwo = getNumberForDivision(seconNumb, (int)seconNumb.length(), base);
-        if (numbOne < numbTwo)
-        {
-            numbOne += convertNumb(firstNumb[seconNumb.length()]) * pow(base,seconNumb.length());
-        }
-        answer += static_cast<char>(findFactorForDivider(base, numbOne, numbTwo) + '0');
-        firstNumb = subtractionNumber(firstNumb, seconNumb, base);
-    }*/
     while(comparisonNumb(firstNumb, seconNumb))
     {
         string divident = firstNumb.substr(0, seconNumb.length());
@@ -350,16 +336,6 @@ int findFactorForDivider(int base, string divident, string divider)
         }
     }
     return left;
-}
-
-int getNumberForDivision(string number, int size, int base)
-{
-    string answer = "";
-    for(int i = 0; i < size; i++)
-    {
-        answer += number[i];
-    }
-    return 1;
 }
 
 
