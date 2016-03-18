@@ -17,11 +17,12 @@ using namespace std;
 void changeStr(string &firstStr, string &secondStr);
 void turnString(string &str, int begin, int end);
 void removeZeroInStr(string &str);
-bool changeNumbMax(string &firstNumb, string &secondNumb);
+bool changeNumbMax(string &firstNumb, string &secondNumb, char sign);
+bool comparisonNumb(string firstNumb, string secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
 int inputBase();
-int findFactorForDivider(int base, long divident, long divider);
+int findFactorForDivider(int base, string divident, string divider);
 int getNumberForDivision(string number, int size, int base);
 char action(char sign, int a, int b, int base, int &ost);
 char getNumberOrLetter(int number);
@@ -35,7 +36,7 @@ string divisionNumber(string firstNumb, string seconNumb, int base);
 
 int main(int argc, const char * argv[])
 {
-    string test = "0123";
+  /*  string test = "0123";
     int sup = 17+48;
     char p = static_cast<char>(sup);
     cout << p + 1 << endl;
@@ -44,12 +45,12 @@ int main(int argc, const char * argv[])
     turnString(two, 0, (int)two.length() - 1);
     cout << one << " " << two <<endl;
     
-    cout << findFactorForDivider(10, 100, 34) << endl;
+    cout << findFactorForDivider(10, 100, 34) << endl;*/
     
-    cout << getAnswer('+', 16, "25", "6s") << endl;
-    cout << getAnswer('-', 10, "133", "133") << endl;
-    cout << getAnswer('*', 10, "25", "4") << endl;
-    cout << getAnswer('/', 10, "100", "20") << endl;
+    cout << "+ " << getAnswer('+', 10, "2", "26") << endl;
+    cout << "- " << getAnswer('-', 10, "133", "134") << endl;
+    cout << "* " << getAnswer('*', 10, "25", "4") << endl;
+    cout << "/ " << getAnswer('/', 10, "100", "20") << endl;
     
     return 0;
 }
@@ -73,7 +74,7 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
     string answer = "";
     turnString(firstNumb, 0, (int)firstNumb.length() - 1);  //Переворачиваем строку, для простого счета
     turnString(secondNumb, 0, (int)secondNumb.length() - 1);
-    if (changeNumbMax(firstNumb, secondNumb))
+    if (changeNumbMax(firstNumb, secondNumb, sign))
     {
         switch (sign)
         {
@@ -106,19 +107,13 @@ string additionNumber(string firstNumber, string secondNumber, int base) //Сл�
     string answer = "";
     int ost = 0;
     answer = helpAdd(firstNumber, secondNumber, 1, base, ost, 0, (int)secondNumber.length() - 1); //Скалдываем и вычисляем
-    if (firstNumber.length() != secondNumber.length())                                     // остаток и склеиваем строку
+    if (firstNumber.length() != secondNumber.length())                                            // остаток и склеиваем строку
     {
         answer += helpAdd(firstNumber, secondNumber, 0, base, ost, (int)secondNumber.length(),(int)firstNumber.length() - 1);
-    }// Если первое чилсо длиннее, то мы добавляем остальные цифры
+    }                                                                                             // Если первое чилсо длиннее, то мы добавляем остальные цифры
     if (ost != 0)
     {
-        if(ost > 9)
-        {
-            answer += static_cast<char>(ost + '0' + 7); // перевод из инта в чар(ост), если больше 9, то прибавляем 7, чтобы
-        }else                                           // получить букву, иначе прибавляем только '0'
-        {
-            answer += static_cast<char>(ost + '0');
-        }
+        answer += getNumberOrLetter(ost);
     }
     turnString(answer, 0, (int)answer.length() - 1); // переворачиваем строку обратно
     return answer;
@@ -151,24 +146,41 @@ void turnString(string &str, int begin, int end)  //Переворачивает
     }
 }
 
-bool changeNumbMax(string &firstNumb, string &secondNumb)   //Ищет максимальное число и (записывает его в firstNumb)
+bool changeNumbMax(string &firstNumb, string &secondNumb, char sign)   //Ищет максимальное число и (записывает его в firstNumb)
 {
+    if (comparisonNumb(firstNumb, secondNumb))
+    {
+        return true;
+    }else
+    {
+        if ( (sign == '-') || (sign == '/') )
+        {
+            return false;
+        }else
+        {
+            changeStr(firstNumb, secondNumb);
+            return true;
+        }
+    }
+}
+
+bool comparisonNumb(string firstNumb, string secondNumb)
+{
+    bool firstGreaterSecond = true;
     if (firstNumb.length() < secondNumb.length())
     {
-        return false;
-       // changeStr(firstNumb, secondNumb);                 //Eсли первое число меньше второго мы выводим false
+        firstGreaterSecond = false;                          //Eсли первое число меньше второго мы выводим false
     }else
     {
         if ((firstNumb.length() == secondNumb.length()))
         {
             if(equalMax(firstNumb,secondNumb))              //Сравниваем строку одинаковой длины
             {
-                return false;
-               // changeStr(firstNumb, secondNumb);
+                firstGreaterSecond = false;
             }
         }
     }
-    return true;
+    return firstGreaterSecond;
 }
 
 void changeStr(string &firstStr, string &secondStr) // меняет местами строки
@@ -273,8 +285,8 @@ char getNumberOrLetter(int number)                        //Функция, вы
     char answer = {};
     if (number > 9)
     {
-        answer = static_cast<char>(number + '0' + 7);    // перевод из инта в чар
-    }else
+        answer = static_cast<char>(number + '0' + 7);      // перевод из инта в чар(ост), если больше 9, то прибавляем 7, чтобы
+    }else                                                  // получить букву, иначе прибавляем только '0'
     {
         answer = static_cast<char>(number + '0');
     }
@@ -285,7 +297,7 @@ char getNumberOrLetter(int number)                        //Функция, вы
 string divisionNumber(string firstNumb, string seconNumb, int base)
 {
     string answer = "";
-    turnString(firstNumb, 0, (int) firstNumb.length() - 1);
+  /*  turnString(firstNumb, 0, (int) firstNumb.length() - 1);
     turnString(seconNumb, 0, (int)seconNumb.length() - 1);
     while(firstNumb.length()>= seconNumb.length())
     {
@@ -297,19 +309,36 @@ string divisionNumber(string firstNumb, string seconNumb, int base)
         }
         answer += static_cast<char>(findFactorForDivider(base, numbOne, numbTwo) + '0');
         firstNumb = subtractionNumber(firstNumb, seconNumb, base);
+    }*/
+    while(comparisonNumb(firstNumb, seconNumb))
+    {
+        string divident = firstNumb.substr(0, seconNumb.length());
+        if (!comparisonNumb(divident, seconNumb))
+        {
+            divident += firstNumb[seconNumb.length()];
+        }
+        string subtrahend = "";
+        subtrahend += getNumberOrLetter(findFactorForDivider(base, divident, seconNumb));
+        turnString(subtrahend, 0, (int) subtrahend.length() - 1);
+        firstNumb = subtractionNumber(firstNumb, multiplicationNumber(seconNumb, subtrahend, base), base);
+        answer += subtrahend;
     }
+    turnString(answer, 0, (int) answer.length());
     return answer;
 }
 
-int findFactorForDivider(int base, long divident, long divider)
+int findFactorForDivider(int base, string divident, string divider)
 {
     int left = 0;
     int x = 0;
     int right = base;
     while (left <= right)
     {
+        string factor = "";
         int middle = (left + right) / 2;
-        if (divider * middle <= divident)
+        factor += getNumberOrLetter(middle);
+        string composition = multiplicationNumber(divider, factor, base);
+        if (comparisonNumb(divident, composition))
         {
             x = middle;
             left = middle + 1;
@@ -323,12 +352,12 @@ int findFactorForDivider(int base, long divident, long divider)
 
 int getNumberForDivision(string number, int size, int base)
 {
-    int answer = convertNumb(number[0]);
-    for (int i = 1; i <= size - 1; i++)
+    string answer = "";
+    for(int i = 0; i < size; i++)
     {
-        answer += convertNumb(number[i]) * (pow(base,i));
+        answer += number[i];
     }
-    return answer;
+    return 1;
 }
 
 
