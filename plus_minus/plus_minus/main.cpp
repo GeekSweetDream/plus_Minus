@@ -35,11 +35,12 @@ string divisionNumber(string firstNumb, string seconNumb, int base);
 
 int main(int argc, const char * argv[])
 {
+    cout << 'A' - '0' << " = A " << 'a' - '0' << " = a" << endl;
     
     cout << "+ " << getAnswer('+', 10, "2", "26") << endl;
     cout << "- " << getAnswer('-', 10, "133", "134") << endl;
     cout << "* " << getAnswer('*', 10, "25", "4") << endl;
-    cout << "/ " << getAnswer('/', 10, "100", "20") << endl;
+    cout << "/ " << getAnswer('/', 10, "100", "10") << endl;
     
     return 0;
 }
@@ -63,7 +64,7 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
     string answer = "";
     turnString(firstNumb, 0, (int)firstNumb.length() - 1);  //Переворачиваем строку, для простого счета
     turnString(secondNumb, 0, (int)secondNumb.length() - 1);
-    if (changeNumbMax(firstNumb, secondNumb, sign))
+    if (changeNumbMax(firstNumb, secondNumb, sign))         // Действия относительно знака
     {
         switch (sign)
         {
@@ -86,7 +87,7 @@ string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //ф
         }
     }else
     {
-     answer = "Error, wrong numbers, the second number is greater than the second number!";
+     answer = "Error, wrong numbers, the second number is greater than the second number!";  //Если
     }
     return answer;
 }
@@ -137,15 +138,15 @@ void turnString(string &str, int begin, int end)  //Переворачивает
 
 bool changeNumbMax(string &firstNumb, string &secondNumb, char sign)   //Ищет максимальное число и (записывает его в firstNumb)
 {
-    if (comparisonNumb(firstNumb, secondNumb))
+    if (comparisonNumb(firstNumb, secondNumb))                  // проверяем какое число больше, если первое, то ничего не делаем
     {
         return true;
     }else
     {
-        if ( (sign == '-') || (sign == '/') )
+        if ( (sign == '-') || (sign == '/'))                                    // Если второе, то смотрим на знак,
         {
             return false;
-        }else
+        }else                                                   // Если знак не удовлетворяет условию, то меняем строки.
         {
             changeStr(firstNumb, secondNumb);
             return true;
@@ -153,9 +154,9 @@ bool changeNumbMax(string &firstNumb, string &secondNumb, char sign)   //Ище�
     }
 }
 
-bool comparisonNumb(string firstNumb, string secondNumb)
+bool comparisonNumb(string firstNumb, string secondNumb)       // Функция сравнивает две строки
 {
-    bool firstGreaterSecond = true;
+    bool firstGreaterSecond = true;                            // Иницилизируем, что первая строка больше
     if (firstNumb.length() < secondNumb.length())
     {
         firstGreaterSecond = false;                          //Eсли первое число меньше второго мы выводим false
@@ -197,9 +198,9 @@ int equalMax(string firstNumb, string secondNumb)  // сравнивает дв�
 int convertNumb(char numb)  //Конвертирует символ в число
 {
     int intNumb = numb - '0';                   //Перевод из чар в инт
-    if ((intNumb) > 9)                          //Если это буква, то отнимаем еще 7
+    if ((intNumb) > 9)                          //Если эта буква, то мы должны отнять 7 у заглавных и 39 у строчных
     {
-        intNumb -= 7;
+        intNumb > 40 ? (intNumb -= 39) : (intNumb -= 7);
     }
     return intNumb;
 }
@@ -280,32 +281,32 @@ char getNumberOrLetter(int number)                        //Функция, вы
         answer = static_cast<char>(number + '0');
     }
     return answer;
-    
 }
 
-string divisionNumber(string firstNumb, string seconNumb, int base)
+string divisionNumber(string firstNumb, string seconNumb, int base)         // Деление
 {
     string answer = "";
-    while(comparisonNumb(firstNumb, seconNumb))
+    while(comparisonNumb(firstNumb, seconNumb))                             // выполняем цикл, пока первое число больше второго
     {
-        string divident = firstNumb.substr(0, seconNumb.length());
-        if (!comparisonNumb(divident, seconNumb))
+        string divident = firstNumb.substr(0, seconNumb.length());          // составляем число, которое будем делить (длина равна длине 2), из первого
+        if (!comparisonNumb(divident, seconNumb))                           // если при равной длине делимое меньше, то добавляем еще одну цифру из первого
         {
             divident += firstNumb[seconNumb.length()];
         }
         string subtrahend = "";
-        subtrahend += getNumberOrLetter(findFactorForDivider(base, divident, seconNumb));
-        turnString(subtrahend, 0, (int) subtrahend.length() - 1);
+        int helpNumb = findFactorForDivider(base, divident, seconNumb);
+        ((helpNumb == 10) && (base == 10)) ? subtrahend = "10" : subtrahend += getNumberOrLetter(helpNumb);       // с помощью фунции findFactor ищем множитель, и
+        turnString(subtrahend, 0, (int) subtrahend.length() - 1);                                                 // записываем его в ответ
         answer += subtrahend;
-        subtrahend = multiplicationNumber(seconNumb, subtrahend, base);
+        subtrahend = multiplicationNumber(seconNumb, subtrahend, base);                         // перемножаем множитель и второе число
         turnString(subtrahend, 0, (int) subtrahend.length() - 1);
-        firstNumb = subtractionNumber(firstNumb, subtrahend, base);
+        firstNumb = subtractionNumber(firstNumb, subtrahend, base);                             // отнимаем от первого числа произведение
     }
     turnString(answer, 0, (int) answer.length() - 1);
     return answer;
 }
 
-int findFactorForDivider(int base, string divident, string divider)
+int findFactorForDivider(int base, string divident, string divider)                             // Дихотомия, которая ищет множитель
 {
     int left = 0;
     int x = 0;
@@ -314,8 +315,8 @@ int findFactorForDivider(int base, string divident, string divider)
     {
         int middle = (left + right) / 2;
         string factor = "";
-        factor += getNumberOrLetter(middle);
-        string composition = multiplicationNumber(divider, factor, base);
+        ((middle == 10) && (base == 10)) ? factor = "01" : factor += getNumberOrLetter(middle);  // Если ответ равен base( 10 с.ч), то нужно присвоить значение 01
+        string composition = multiplicationNumber(divider, factor, base);                        // СЛОЖНО, СЛОЖНО НАХУЙ, НО БЛЯТЬ ИЗИ ПОНЯТЬ НА ПРИМЕРАХ.
         if (comparisonNumb(divident, composition))
         {
             x = middle;
