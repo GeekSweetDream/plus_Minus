@@ -35,7 +35,6 @@ string divisionNumber(string firstNumb, string seconNumb, int base);
 
 int main(int argc, const char * argv[])
 {
-    cout << 'A' - '0' << " = A " << 'a' - '0' << " = a" << endl;
     
     cout << "+ " << getAnswer('+', 10, "2", "26") << endl;
     cout << "- " << getAnswer('-', 10, "133", "134") << endl;
