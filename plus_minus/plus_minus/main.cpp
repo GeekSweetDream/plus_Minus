@@ -294,7 +294,7 @@ string divisionNumber(string firstNumb, string seconNumb, int base)         // �
         }
         string subtrahend = "";
         int helpNumb = findFactorForDivider(base, divident, seconNumb);
-        ((helpNumb == 10) && (base == 10)) ? subtrahend = "10" : subtrahend += getNumberOrLetter(helpNumb);       // с помощью фунции findFactor ищем множитель, и
+        (helpNumb == base) ? subtrahend = "10" : subtrahend += getNumberOrLetter(helpNumb);       // с помощью фунции findFactor ищем множитель, и
         turnString(subtrahend, 0, (int) subtrahend.length() - 1);                                                 // записываем его в ответ
         answer += subtrahend;
         subtrahend = multiplicationNumber(seconNumb, subtrahend, base);                         // перемножаем множитель и второе число
@@ -314,7 +314,7 @@ int findFactorForDivider(int base, string divident, string divider)             
     {
         int middle = (left + right) / 2;
         string factor = "";
-        ((middle == 10) && (base == 10)) ? factor = "01" : factor += getNumberOrLetter(middle);  // Если ответ равен base( 10 с.ч), то нужно присвоить значение 01
+        (middle == base) ? factor = "01" : factor += getNumberOrLetter(middle);  // Если ответ равен base( X с.ч), то нужно присвоить значение 01
         string composition = multiplicationNumber(divider, factor, base);                        // СЛОЖНО, СЛОЖНО НАХУЙ, НО БЛЯТЬ ИЗИ ПОНЯТЬ НА ПРИМЕРАХ.
         if (comparisonNumb(divident, composition))
         {
