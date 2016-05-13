@@ -18,6 +18,7 @@ void changeStr(string &firstStr, string &secondStr);
 void turnString(string &str, int begin, int end);
 void removeZeroInStr(string &str);
 bool changeNumbMax(string &firstNumb, string &secondNumb, char sign);
+bool checkCorrectedInputValue(string value, int base);
 int comparisonNumb(string firstNumb, string secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
@@ -56,6 +57,21 @@ int inputBase()
     int base = 10;
     cin >> base;
     return base;
+}
+
+bool checkCorrectedInputValue(string value, int base)
+{
+    bool answer = true;
+    int  sizeValue = (int) value.length();
+    for (int i = 0; i < sizeValue; ++i)
+    {
+        if (convertNumb(value[i]))
+        {
+            answer = false;
+            break;
+        }
+    }
+    return answer;
 }
 
 string getAnswer(char sign, int base, string firstNumb, string secondNumb)  //функция, где происходит весь счет.
