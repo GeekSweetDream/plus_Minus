@@ -65,7 +65,7 @@ bool checkCorrectedInputValue(string value, int base)
     int  sizeValue = (int) value.length();
     for (int i = 0; i < sizeValue; ++i)
     {
-        if (convertNumb(value[i]))
+        if (convertNumb(value[i]) >= base)
         {
             answer = false;
             break;
