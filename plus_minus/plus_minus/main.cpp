@@ -19,6 +19,7 @@ void turnString(string &str, int begin, int end);
 void removeZeroInStr(string &str);
 bool changeNumbMax(string &firstNumb, string &secondNumb, char sign);
 bool checkCorrectedInputValue(string value, int base);
+bool checkCorrectedInputBase(int base);
 int comparisonNumb(string firstNumb, string secondNumb);
 int convertNumb(char numb);
 int equalMax(string firstNumb, string secondNumb);
@@ -56,11 +57,17 @@ int inputBase()
 {
     int base = 10;
     cin >> base;
-    if(base > 36)
-    {
-        base = 10;
-    }
     return base;
+}
+
+bool checkCorrectedInputBase(int base)
+{
+    bool answer = true;
+    if (base > 36)
+    {
+        answer = false;
+    }
+    return answer;
 }
 
 bool checkCorrectedInputValue(string value, int base)
