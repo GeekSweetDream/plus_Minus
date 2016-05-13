@@ -56,6 +56,10 @@ int inputBase()
 {
     int base = 10;
     cin >> base;
+    if(base > 36)
+    {
+        base = 10;
+    }
     return base;
 }
 
